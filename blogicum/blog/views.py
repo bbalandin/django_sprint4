@@ -100,8 +100,9 @@ def delete_post(request, post_id):
     if request.method == 'POST':
         post.delete()
         return redirect('blog:index')
-    context = {'post': post}
-    return render(request, 'blog/delete.html', context)
+    form = PostForm(instance=post)
+    context = {'form': form}
+    return render(request, 'blog/create.html', context)
 
 
 @login_required
