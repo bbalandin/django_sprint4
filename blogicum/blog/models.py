@@ -17,6 +17,9 @@ class Category(models.Model):
                                        ' чтобы скрыть публикацию.')
     created_at = models.DateTimeField('Добавлено', auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
@@ -28,6 +31,9 @@ class Location(models.Model):
                                        help_text='Снимите галочку,'
                                        ' чтобы скрыть публикацию.')
     created_at = models.DateTimeField('Добавлено', auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = 'местоположение'
@@ -55,6 +61,24 @@ class Post(models.Model):
 
     image = models.ImageField('Фото', upload_to='posts_images', blank=True)
 
+    @property
+    def comment_count(self):
+        return self.comments.count()
+
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
+
+
+class Comments(models.Model):
+    text = models.TextField('Текст комментария')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('created_at',)

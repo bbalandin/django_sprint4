@@ -15,8 +15,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# LOGOUT_REDIRECT_URL = 'index'
 MEDIA_ROOT = BASE_DIR / 'media'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# Указываем директорию, в которую будут сохраняться файлы писем:
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+LOGIN_URL = 'login'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,14 +30,18 @@ SECRET_KEY = 'django-insecure-2_d0+wmkfur8=d!707fv_2y!2sdabzv!yns7j=52+c(t&alp%a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
-# LOGIN_REDIRECT_URL = 'blog:index'
+LOGIN_REDIRECT_URL = 'blog:index'
 
 INSTALLED_APPS = [
     'django_bootstrap5',
+    'core.apps.CoreConfig',
     'pages.apps.PagesConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',
@@ -74,7 +82,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blogicum.wsgi.application'
-
+# AUTH_USER_MODEL = 'users.MyUser'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -132,3 +140,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
